@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Explore</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b570263ca1.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300&family=Roboto:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class='container'>
+        <div class="main-content">
+            <div class="logo">
+                <img src="images/logo-winee.png" alt="logo-wine">
+            </div>
+            <div class="content">
+                <div class="content__title">
+                    <h1>Welcome to <span>WineExplore</span></h1>
+                </div>
+                <div class="content__about-app">
+                    <h3>WineExplore is an application that can gives you recomandations of wine based on certin food.You can also filter by setting the max-price.</h3>
+                </div>
+                <div class="content__search-form">
+                    <form method="post" action="/submit">
+                        <input type="text" name="searchBox" placeholder="Type your dish..." id="searchBox">
+                        <label>Sort by Max-Price</label>
+                        <input type="number" name="maxPrice" placeholder="max-price" id="maxPrice">
+                        <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                </div>
+                <div class="content__details-app">
+                    <p>Here is what you can expect:
+                        <ul>
+                            <li>a wine recomandation</li>
+                            <li>a description of that wine</li>
+                            <li>ratings </li>
+                            <li>price and a link from where you can buy</li>
+                        </ul>
+                    </p>
+                </div>
+                <% if(locals.wines){ %>
+                    <% wines.forEach((wine) => { %> 
+                <div class="results" id="api-response">
+                    <div class="results__title">
+                        <h3>Results for </h3>
+                    </div>
+                    <div class="results__content">
+                        <div class="results__image">
+                            <img src=<%= wine.imageUrl %>></img>
+                        </div>
+                        <div class="results__text">
+                            <div class="results__name-link">
+                                <div class="results__name">
+                                    <h1><%= wine.title %></h1>
+                                </div>
+                                <div class="results__link">
+                                    <a href=<%= wine.link %> target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                </div>
+                            </div>
+                            <% if(locals.bestWines){ %>
+                            <div class="results__description">
+                                <p><%= bestWines %></p>
+                            </div>
+                            <div class="results__ratings">
+                                <div class="averageRating">
+                                    <p>Average Rating</p>
+                                    <p><%= wine.averageRating.toFixed(2) %></p>
+                                </div>
+                                <div class="ratingCount">
+                                    <p>Rating Count</p>
+                                    <p><%= wine.ratingCount.toFixed(2) %></p>
+                                </div>
+                                <div class="score">
+                                    <p>Score</p>
+                                    <p><%= wine.score.toFixed(2) %></p>
+                                </div>
+                            </div>
+                            <div class="results__price">
+                                <p>$<%= wine.price.slice(1,6) %> </p>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% }) %> 
+                    <% } %>
+                    <button class="searchAgain activ" name="searchAgain" action="/searchAgain" method="post">More Results</button>
+                </div>
+            </div>
+        </div>
+       
+        <div class="footer">
+            <div class="footer__text">
+                <p>Get in toach for further develop this app with new features</p>
+            </div>
+            <div class="footer__social-media">
+                <a href="#"><i class="fa-solid fa-envelope"></i></a>
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+
+  
+        
+    </div>
+  <script>
+    let searchAgain = document.querySelector('.searchAgain'); 
+let results = document.querySelector('.results') 
+let searchBox = document.querySelector('#searchBtn');
+let details = document.querySelector('.content__details-app');
+
+  function hideDetails(){
+    if(results){
+        
+        details.style.display='none'
+    } else{
+        details.style.display='block'
+      
+    }
+
+   
+}
+function showMoreResults(){
+    if(results){
+        searchAgain.style.display='block'
+    } else{
+        searchAgain.style.display='none'
+    }
+}
+ showMoreResults()
+
+ function hideRes(){ 
+   location.reload()
+} 
+
+searchBox.addEventListener('click', hideDetails)
+searchAgain.addEventListener('click', hideRes);
+  </script>
+</body>
+</html>
